@@ -1,0 +1,30 @@
+# Composer dependencies
+/vendor/
+
+# Node dependencies (nếu có dùng frontend npm)
+node_modules/
+
+# IDE/Editor
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs, caches, temp
+*.log
+*.tmp
+*.cache
+*.bak
+
+# Env or sensitive config
+.env
+.env.*
+config/database.php
+
+# PHPUnit
+phpunit.xml
+phpunit.xml.dist
