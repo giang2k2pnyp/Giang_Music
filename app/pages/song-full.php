@@ -97,7 +97,7 @@
     </div>
 
     <!-- Cột giữa: Chi tiết bài hát -->
-    <div class="center-column" style="flex: 1; min-width: 0; display: flex; justify-content: center;"> <!-- Thêm display:flex và justify-content:center -->
+    <div class="center-column" style="flex: 1; min-width: 0; display: flex; justify-content: center;"> 
         <div class="music-card-full" style="width: 600px; max-width: 100%; display: flex; flex-direction: column; align-items: center;">
 	        <h2 class="card-title"><?=esc($row['title'])?></h2>
 	        <div class="card-subtitle">by: <?=esc(get_artist($row['artist_id']))?></div>
