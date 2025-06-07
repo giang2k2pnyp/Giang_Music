@@ -31,6 +31,18 @@ if(!is_admin())
 			require page('admin/songs');
 			break;
 		
+		case 'playlist':
+			require page('admin/playlist');
+			break;
+		
+		case 'messages':
+			require page('admin/messages');
+			break;
+		
+		case 'reply':
+			require page('admin/reply');
+			break;
+		
 		default:
 			require page('admin/404');
 			break;

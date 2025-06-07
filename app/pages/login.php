@@ -17,7 +17,16 @@
 
   				authenticate($row);
 				message("login successfull");
-				redirect('admin');  	
+				// Nếu có đường dẫn redirect thì quay về đó, ngược lại quay về home
+				$redirect_url = $_GET['redirect'] ?? 'home';
+
+				// Nếu redirect đã là URL đầy đủ (bắt đầu bằng http), dùng luôn
+				// if (preg_match("/^https?:\/\//", $redirect_url)) {
+				// 	redirect($redirect_url);
+				// } else {
+				// 	redirect(ROOT . '/' . ltrim($redirect_url, '/'));
+				// }	
+				redirect($redirect_url);
 				exit;			
   			}
 

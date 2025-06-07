@@ -51,4 +51,24 @@
 
 	</section>
 
+	<div class="section-title">Playlists</div>
+
+	<section class="content">
+		
+		<?php 
+			//$rows = db_query("select * from songs where featured = 1 order by id desc limit 16");
+			$rows = db_query("SELECT * FROM list_song ORDER BY RAND() LIMIT 4");
+			// $rows = db_query("select * from songs order by id desc limit 16");
+		?>
+
+		<?php if(!empty($rows)):?>
+			<?php foreach($rows as $row):?>
+				<?php include page('includes/playlist')?>
+			<?php endforeach;?>
+		<?php else:?>
+			<div class="m-2">No Playlists found</div>
+		<?php endif;?>
+
+	</section>
+
 <?php require page('includes/footer')?>

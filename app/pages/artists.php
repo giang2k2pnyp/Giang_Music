@@ -1,6 +1,6 @@
 <?php require page('includes/header')?>
 	
-	<div class="section-title">Music</div>
+	<div class="section-title">Artists</div>
 
 	<section class="content">
 		

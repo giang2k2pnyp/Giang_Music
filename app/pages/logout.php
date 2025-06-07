@@ -7,4 +7,4 @@ if(!empty($_SESSION['USER']))
 	session_regenerate_id();
 }
 
-redirect('login');
+redirect('home');

@@ -15,6 +15,19 @@
 		.dropdown-list{
 			background-color: #444;
 		}
+
+		/* Thêm style cho badge thông báo */
+		.badge {
+			background: red;
+			color: white;
+			border-radius: 50%;
+			padding: 2px 6px;
+			font-size: 0.8em;
+			margin-left: 5px;
+			display: inline-block;
+			min-width: 20px;
+			text-align: center;
+		}
 	</style>
 	<header style="background-color: #3e344e; color: white;">
 		<div class="logo-holder">
@@ -33,11 +46,37 @@
 				<div class="nav-item"><a href="<?=ROOT?>/admin/songs">Songs</a></div>
 				<div class="nav-item"><a href="<?=ROOT?>/admin/categories">Categories</a></div>
 				<div class="nav-item"><a href="<?=ROOT?>/admin/artists">Artists</a></div>
+				<div class="nav-item"><a href="<?=ROOT?>/admin/playlist">Playlist</a></div>
+
+				<?php
+				// Kiểm tra tin nhắn chưa đọc
+				$unread_count = 0;
+				if (user('role') == 'admin') {
+					$query = "SELECT COUNT(*) as count FROM threads WHERE is_read = 0";
+					$result = db_query($query);
+					$unread_count = $result[0]['count'] ?? 0;
+				}
+				?>
+
 				<div class="nav-item dropdown">
-					<a href="#">Hi, <?=user('username')?></a>
+					<a href="#">Hi, <?=user('username')?>
+						<?php if ($unread_count > 0): ?>
+							<span class="badge"><?=$unread_count?></span>
+						<?php endif; ?>
+					</a>
 					<div class="dropdown-list">
-						<div class="nav-item"><a href="<?=ROOT?>/profile">Profile</a></div>
+						<div class="nav-item"><a href="<?=ROOT?>/admin/users/edit/<?=user('id')?>">Profile</a></div>
 						<div class="nav-item"><a href="<?=ROOT?>">Website</a></div>
+						<?php if (user('role') == 'admin'): ?>
+							<div class="nav-item">
+								<a href="<?=ROOT?>/admin/messages">
+									Messages
+									<?php if ($unread_count > 0): ?>
+										<span class="badge"><?=$unread_count?></span>
+									<?php endif; ?>
+								</a>
+							</div>
+						<?php endif; ?>
 						<div class="nav-item"><a href="<?=ROOT?>/logout">Logout</a></div>
 					</div>
 				</div>
