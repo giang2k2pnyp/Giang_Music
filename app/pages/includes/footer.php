@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="<?=ROOT?>/assets/css/style.css">
+
 	<footer>
 		<div class="footer-div">
 			<ul>
@@ -34,7 +36,6 @@
 			</svg>
 		</div>
 	</footer>
-</body>
 
 <script src="<?=ROOT?>/assets/js/menu-popper.js?35"></script>
 </html>
