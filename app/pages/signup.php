@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <?php endif;?>
 
         <form method="post">
-            <center><img src="assets/images/logo.jpg" style="width: 150px;border-radius: 50%;border: solid thin #ccc;"></center>
+            <center><img src="assets/images/Giang_Music.png" style="width: 150px;border-radius: 50%;border: solid thin #ccc;"></center>
             <h2>Đăng ký tài khoản</h2>
             
             <input value="<?= set_value('username') ?>" class="form-control my-1" type="text" name="username" placeholder="Tên người dùng">

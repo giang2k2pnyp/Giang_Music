@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="<?=ROOT?>/assets/css/style.css">
 <?php require page('includes/header')?>
 
 <center><div class="section-title">Chi tiết Playlist</div></center>
@@ -14,6 +15,7 @@
         <div class="playlist-not-found">
             <p>Không tìm thấy playlist!</p>
             <a href="<?=ROOT?>/playlists" class="btn bg-purple">Quay lại danh sách</a>
+            <a href="<?=ROOT?>/music" class="btn bg-purple">Khám phá nhạc</a>
         </div>
     <?php endif;?>
 </section>

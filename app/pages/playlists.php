@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="<?=ROOT?>/assets/css/style.css">
 <?php require page('includes/header')?>
 
 <div class="section-title">Playlists</div>

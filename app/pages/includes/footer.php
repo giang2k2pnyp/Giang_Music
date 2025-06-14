@@ -39,3 +39,385 @@
 
 <script src="<?=ROOT?>/assets/js/menu-popper.js?35"></script>
 </html>
+
+<!-- Player toàn cục -->
+<div id="global-player" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #222; padding: 10px; z-index: 1000; border-top: 1px solid #444;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+        <img id="global-player-thumbnail" src="" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+        
+        <div style="flex: 1; min-width: 100px;">
+            <div id="global-player-title" style="font-weight: bold; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></div>
+            <div id="global-player-artist" style="font-size: 0.9em; color: #aaa;"></div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button id="global-prev-btn" class="player-btn" title="Bài trước">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
+                </svg>
+            </button>
+            
+            <button id="global-play-btn" class="player-btn" title="Phát/Tạm dừng">
+                <svg id="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z"></path>
+                </svg>
+                <svg id="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display: none;">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+                </svg>
+            </button>
+            
+            <button id="global-next-btn" class="player-btn" title="Bài sau">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <audio id="global-player-audio" style="flex: 2; min-width: 200px;"></audio>
+        
+        <!-- Phần điều khiển âm lượng -->
+        <div style="display: flex; align-items: center; gap: 8px; min-width: 120px;">
+            <button id="volume-toggle" class="player-btn" title="Tắt tiếng">
+                <svg id="volume-high-icon" width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+                </svg>
+                <svg id="volume-mute-icon" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display: none;">
+                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"></path>
+                </svg>
+            </button>
+            <input type="range" id="volume-control" min="0" max="1" step="0.01" value="1" style="width: 80px;">
+        </div>
+        
+        <div style="min-width: 100px; text-align: center; color: #aaa; font-size: 0.9em;">
+            <span id="current-time">0:00</span> / 
+            <span id="total-time">0:00</span>
+        </div>
+        
+        <button id="global-close-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2em;" title="Đóng player">
+            &times;
+        </button>
+    </div>
+</div>
+
+<script>
+// Hằng số ROOT (cần khai báo trước nếu chưa có)
+if (typeof ROOT === 'undefined') {
+    window.ROOT = '<?= ROOT ?>';
+}
+
+// Đối tượng quản lý player toàn cục
+window.globalPlayer = {
+    playlist: [],
+    currentIndex: 0,
+    isPlaying: false,
+    volume: 1,
+    isMuted: false
+};
+
+// Khởi tạo player khi trang tải
+document.addEventListener('DOMContentLoaded', function() {
+    const player = document.getElementById('global-player-audio');
+    const volumeControl = document.getElementById('volume-control');
+    
+    // Khôi phục trạng thái từ sessionStorage
+    const savedState = sessionStorage.getItem('globalPlayerState');
+    if (savedState) {
+        try {
+            const state = JSON.parse(savedState);
+            window.globalPlayer = state;
+            
+            // Nếu có playlist đang phát, hiển thị player
+            if (state.playlist.length > 0) {
+                document.getElementById('global-player').style.display = 'block';
+                updatePlayerUI(state.currentIndex);
+                
+                // Áp dụng cài đặt âm lượng
+                player.volume = state.volume;
+                volumeControl.value = state.volume;
+                updateVolumeIcons(state.isMuted);
+                
+                // Nếu đang phát, tiếp tục phát
+                if (state.isPlaying) {
+                    player.play().catch(e => console.log("Autoplay error:", e));
+                    document.getElementById('play-icon').style.display = 'none';
+                    document.getElementById('pause-icon').style.display = 'inline';
+                }
+            }
+        } catch (e) {
+            console.error("Error parsing player state:", e);
+        }
+    }
+    
+    // Gắn sự kiện cho nút điều khiển
+    document.getElementById('global-play-btn').addEventListener('click', togglePlay);
+    document.getElementById('global-prev-btn').addEventListener('click', playPrev);
+    document.getElementById('global-next-btn').addEventListener('click', playNext);
+    document.getElementById('global-close-btn').addEventListener('click', closePlayer);
+    
+    // Sự kiện cho điều khiển âm lượng
+    volumeControl.addEventListener('input', function() {
+        const volume = parseFloat(this.value);
+        player.volume = volume;
+        window.globalPlayer.volume = volume;
+        
+        // Tự động bật/tắt mute khi điều chỉnh volume
+        if (volume === 0) {
+            player.muted = true;
+            window.globalPlayer.isMuted = true;
+        } else if (window.globalPlayer.isMuted) {
+            player.muted = false;
+            window.globalPlayer.isMuted = false;
+        }
+        
+        updateVolumeIcons(window.globalPlayer.isMuted);
+        savePlayerState();
+    });
+    
+    // Sự kiện cho nút mute
+    document.getElementById('volume-toggle').addEventListener('click', function() {
+        window.globalPlayer.isMuted = !window.globalPlayer.isMuted;
+        player.muted = window.globalPlayer.isMuted;
+        updateVolumeIcons(window.globalPlayer.isMuted);
+        savePlayerState();
+    });
+    
+    // Cập nhật thời gian
+    player.addEventListener('timeupdate', function() {
+        document.getElementById('current-time').textContent = formatTime(player.currentTime);
+    });
+    
+    player.addEventListener('loadedmetadata', function() {
+        document.getElementById('total-time').textContent = formatTime(player.duration);
+    });
+    
+    player.addEventListener('ended', playNext);
+});
+
+// Cập nhật biểu tượng âm lượng
+function updateVolumeIcons(isMuted) {
+    if (isMuted) {
+        document.getElementById('volume-high-icon').style.display = 'none';
+        document.getElementById('volume-mute-icon').style.display = 'inline';
+    } else {
+        document.getElementById('volume-high-icon').style.display = 'inline';
+        document.getElementById('volume-mute-icon').style.display = 'none';
+    }
+}
+
+// Hàm bật/tắt phát nhạc
+function togglePlay() {
+    const player = document.getElementById('global-player-audio');
+    
+    if (window.globalPlayer.isPlaying) {
+        player.pause();
+        document.getElementById('play-icon').style.display = 'inline';
+        document.getElementById('pause-icon').style.display = 'none';
+    } else {
+        player.play().catch(e => console.log("Play error:", e));
+        document.getElementById('play-icon').style.display = 'none';
+        document.getElementById('pause-icon').style.display = 'inline';
+    }
+    
+    window.globalPlayer.isPlaying = !window.globalPlayer.isPlaying;
+    savePlayerState();
+}
+
+// Hàm để bắt đầu phát một playlist (gọi từ bất kỳ trang nào)
+window.playGlobalPlaylist = function(playlist, startIndex = 0) {
+    if (playlist.length === 0) return;
+    
+    window.globalPlayer = {
+        playlist: playlist,
+        currentIndex: startIndex,
+        isPlaying: true,
+        volume: window.globalPlayer.volume || 1,
+        isMuted: window.globalPlayer.isMuted || false
+    };
+    
+    document.getElementById('global-player').style.display = 'block';
+    updatePlayerUI(startIndex);
+    
+    // Áp dụng cài đặt âm lượng
+    const player = document.getElementById('global-player-audio');
+    player.volume = window.globalPlayer.volume;
+    player.muted = window.globalPlayer.isMuted;
+    document.getElementById('volume-control').value = window.globalPlayer.volume;
+    updateVolumeIcons(window.globalPlayer.isMuted);
+    
+    savePlayerState();
+    
+    // Tự động phát
+    player.play().catch(e => console.log("Autoplay blocked:", e));
+    document.getElementById('play-icon').style.display = 'none';
+    document.getElementById('pause-icon').style.display = 'inline';
+};
+
+// Cập nhật giao diện player
+function updatePlayerUI(index) {
+    const song = window.globalPlayer.playlist[index];
+    if (!song) return;
+    
+    document.getElementById('global-player-title').textContent = song.title;
+    document.getElementById('global-player-artist').textContent = song.artist_name;
+    document.getElementById('global-player-thumbnail').src = ROOT + '/' + song.image;
+    
+    const player = document.getElementById('global-player-audio');
+    player.src = ROOT + '/' + song.file;
+    player.load();
+}
+
+// Chuyển bài tiếp theo
+function playNext() {
+    const newIndex = (window.globalPlayer.currentIndex + 1) % window.globalPlayer.playlist.length;
+    window.globalPlayer.currentIndex = newIndex;
+    updatePlayerUI(newIndex);
+    savePlayerState();
+    
+    const player = document.getElementById('global-player-audio');
+    player.play();
+    document.getElementById('play-icon').style.display = 'none';
+    document.getElementById('pause-icon').style.display = 'inline';
+}
+
+// Chuyển bài trước
+function playPrev() {
+    const newIndex = (window.globalPlayer.currentIndex - 1 + window.globalPlayer.playlist.length) % window.globalPlayer.playlist.length;
+    window.globalPlayer.currentIndex = newIndex;
+    updatePlayerUI(newIndex);
+    savePlayerState();
+    
+    const player = document.getElementById('global-player-audio');
+    player.play();
+    document.getElementById('play-icon').style.display = 'none';
+    document.getElementById('pause-icon').style.display = 'inline';
+}
+
+// Đóng player
+function closePlayer() {
+    document.getElementById('global-player').style.display = 'none';
+    const player = document.getElementById('global-player-audio');
+    player.pause();
+    player.src = '';
+    
+    // Reset state
+    window.globalPlayer = {
+        playlist: [],
+        currentIndex: 0,
+        isPlaying: false,
+        volume: window.globalPlayer.volume || 1,
+        isMuted: window.globalPlayer.isMuted || false
+    };
+    
+    // Xóa sessionStorage
+    sessionStorage.removeItem('globalPlayerState');
+}
+
+// Lưu trạng thái player
+function savePlayerState() {
+    sessionStorage.setItem('globalPlayerState', JSON.stringify(window.globalPlayer));
+}
+
+// Định dạng thời gian
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+</script>
+
+<style>
+.player-btn {
+    background: #333;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.player-btn:hover {
+    background: #444;
+    transform: scale(1.05);
+}
+
+.player-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+#global-player audio {
+    height: 40px;
+}
+
+/* Style cho thanh điều chỉnh âm lượng */
+#volume-control {
+    -webkit-appearance: none;
+    height: 5px;
+    background: #555;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#volume-control:hover {
+    background: #666;
+}
+
+#volume-control::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#volume-control::-webkit-slider-thumb:hover {
+    background: #1db954;
+}
+
+#volume-control::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+#volume-control::-moz-range-thumb:hover {
+    background: #1db954;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    #global-player > div {
+        gap: 10px;
+    }
+    
+    #global-player-thumbnail {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .player-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    #global-player audio {
+        min-width: 150px;
+    }
+    
+    #volume-control {
+        width: 60px;
+    }
+}
+</style>

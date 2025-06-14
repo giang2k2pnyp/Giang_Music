@@ -226,7 +226,7 @@
     <header class="admin-header">
         <div class="admin-header-container">
             <div class="logo-holder">
-                <a href="<?=ROOT?>"><img class="logo" src="<?=ROOT?>/assets/images/logo.jpg"></a>
+                <a href="<?=ROOT?>"><img class="logo" src="<?=ROOT?>/assets/images/Giang_Music.png"></a>
             </div>
             
             <div class="mobile-toggle">

@@ -15,7 +15,7 @@ ob_start();
 <header>
 	<div class="header-container">
 		<div class="logo-holder">
-			<a href="<?=ROOT?>"><img class="logo" src="<?=ROOT?>/assets/images/logo.jpg"></a>
+			<a href="<?=ROOT?>"><img class="logo" src="<?=ROOT?>/assets/images/Giang_Music.png"></a>
 		</div>
 
 		<!-- Phần này chỉ hiển thị trên màn hình nhỏ -->
@@ -97,6 +97,9 @@ ob_start();
 </header>
 
 <script>
+// Định nghĩa ROOT cho toàn bộ JavaScript
+window.ROOT = '<?= ROOT ?>';
+
 document.addEventListener('DOMContentLoaded', function() {
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mainContent = document.querySelector('.main-content');

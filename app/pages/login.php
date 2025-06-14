@@ -56,7 +56,7 @@
 
                 <form method="post" class="login-form">
                     <div class="logo-container">
-                        <img src="assets/images/logo.jpg" class="logo-img">
+                        <img src="assets/images/Giang_Music.png" class="logo-img">
                     </div>
                     
                     <h2 class="login-title">Đăng nhập</h2>

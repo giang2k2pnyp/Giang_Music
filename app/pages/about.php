@@ -3,92 +3,83 @@
 
 <div class="about-container">
     <div class="about-content">
-        <h1>About Giang Music</h1>
+        <div class="breadcrumb">
+            <a href="<?=ROOT?>">Trang chủ</a> / 
+            <a href="<?=ROOT?>/music">Bài hát</a> / 
+            <a href="<?=ROOT?>/login">Đăng nhập</a> / 
+            <a href="<?=ROOT?>/signup">Đăng ký</a>
+        </div>
+
+        <h1>Về Giang Music</h1>
         
         <div class="about-section">
             <div class="about-text">
-                <h2>Our Story</h2>
+                <h2>Câu Chuyện Của Chúng Tôi</h2>
                 <p>
-                    Founded in 2023, Giang Music started as a passion project by music enthusiast Nguyen Van Giang. 
-                    What began as a small collection of local artists has grown into a vibrant platform connecting 
-                    music lovers with talented artists from around the world.
+                    Thành lập năm 2025, Giang Music bắt đầu từ niềm đam mê âm nhạc của Nguyễn Trường Giang.
+                    Từ bộ sưu tập nhỏ các nghệ sĩ cả nước, chúng tôi đã phát triển thành nền tảng kết nối
+                    người yêu nhạc với các nghệ sĩ tài năng khắp thế giới.
                 </p>
                 <p>
-                    We believe that music has the power to transcend boundaries and bring people together. 
-                    Our mission is to create a space where both established and emerging artists can share 
-                    their creations with a global audience.
+                    Chúng tôi tin âm nhạc có sức mạnh vượt qua mọi ranh giới. Sứ mệnh của chúng tôi là tạo không gian
+                    để nghệ sĩ ở mọi cấp độ chia sẻ tác phẩm với công chúng toàn cầu.
                 </p>
             </div>
             <div class="about-image">
-                <img src="<?=ROOT?>/assets/images/about1.jpg" alt="Giang Music Studio">
+                <img src="<?=ROOT?>/assets/images/Giang_Music.png" alt="Phòng thu Giang Music">
             </div>
         </div>
         
         <div class="about-section reverse">
             <div class="about-text">
-                <h2>What We Offer</h2>
+                <h2>Dịch Vụ Của Chúng Tôi</h2>
                 <ul>
-                    <li>🎵 Extensive music library with thousands of tracks across all genres</li>
-                    <li>🎤 Platform for independent artists to showcase their talent</li>
-                    <li>🎧 High-quality streaming experience with adaptive bitrate</li>
-                    <li>📱 Cross-platform compatibility (Web, iOS, Android)</li>
-                    <li>🎛️ Curated playlists for every mood and occasion</li>
-                    <li>🎼 Exclusive content and early releases</li>
+                    <li>🎵 Kho nhạc đa dạng với hàng ngàn bài hát</li>
+                    <li>🎤 Nền tảng cho nghệ sĩ độc lập</li>
+                    <li>🎧 Phát nhạc chất lượng cao</li>
+                    <li>📱 Dùng được trên mọi thiết bị</li>
+                    <li>🎛️ Playlist theo tâm trạng</li>
+                    <li>🎼 Nội dung độc quyền</li>
                 </ul>
             </div>
             <div class="about-image">
-                <img src="<?=ROOT?>/assets/images/about2.jpg" alt="Music Collection">
+                <img src="<?=ROOT?>/assets/images/background1.png" alt="Bộ sưu tập âm nhạc">
             </div>
         </div>
         
         <div class="mission-section">
-            <h2>Our Mission</h2>
+            <h2>Sứ Mệnh Của Chúng Tôi</h2>
             <div class="mission-cards">
                 <div class="mission-card">
-                    <div class="icon">🎯</div>
-                    <h3>Empower Artists</h3>
-                    <p>Provide fair compensation and promotion for creators</p>
-                </div>
-                <div class="mission-card">
                     <div class="icon">❤️</div>
-                    <h3>Enrich Listeners</h3>
-                    <p>Deliver exceptional music discovery experiences</p>
+                    <h3>Phục Vụ Người Nghe</h3>
+                    <p>Mang đến trải nghiệm khám phá âm nhạc tuyệt vời</p>
                 </div>
                 <div class="mission-card">
                     <div class="icon">🌍</div>
-                    <h3>Global Community</h3>
-                    <p>Connect music lovers across cultural boundaries</p>
+                    <h3>Kết Nối Toàn Cầu</h3>
+                    <p>Gắn kết người yêu nhạc xuyên biên giới</p>
                 </div>
             </div>
         </div>
         
         <div class="team-section">
-            <h2>Meet Our Team</h2>
+            <h2>Đội Ngũ Chúng Tôi</h2>
             <div class="team-members">
                 <div class="team-member">
-                    <img src="<?=ROOT?>/assets/images/giang.jpg" alt="Nguyen Van Giang">
-                    <h3>Nguyen Van Giang</h3>
-                    <p>Founder & CEO</p>
-                </div>
-                <div class="team-member">
-                    <img src="<?=ROOT?>/assets/images/team1.jpg" alt="Music Curator">
-                    <h3>Le Thi Mai</h3>
-                    <p>Head of Artist Relations</p>
-                </div>
-                <div class="team-member">
-                    <img src="<?=ROOT?>/assets/images/team2.jpg" alt="Tech Lead">
-                    <h3>Tran Minh Duc</h3>
-                    <p>Technology Director</p>
+                    <img src="<?=ROOT?>/assets/images/Giang.png" alt="Nguyen Van Giang">
+                    <h3>Nguyễn Trường Giang</h3>
+                    <p>Lập trình viên và Admin website</p>
                 </div>
             </div>
         </div>
         
         <div class="cta-section">
-            <h2>Join Our Musical Journey</h2>
-            <p>Become part of our growing community of artists and music enthusiasts</p>
+            <h2>Tham Gia Cùng Chúng Tôi</h2>
+            <p>Trở thành phần của cộng đồng âm nhạc đang phát triển</p>
             <div class="cta-buttons">
-                <a href="<?=ROOT?>/signup" class="btn-primary">Sign Up Free</a>
-                <a href="<?=ROOT?>/artist-program" class="btn-secondary">Artist Program</a>
+                <a href="<?=ROOT?>/signup" class="btn-primary">Đăng ký Miễn phí</a>
+                <a href="<?=ROOT?>/artists" class="btn-secondary">Dành cho Nghệ sĩ</a>
             </div>
         </div>
     </div>
