@@ -89,7 +89,7 @@ $playlists = db_query($query);
 }
 
 .table th {
-    background-color: #f8f9fa;
+    background-color:rgb(83, 83, 83);
     font-weight: 600;
 }
 
