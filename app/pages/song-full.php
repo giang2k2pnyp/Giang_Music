@@ -100,7 +100,11 @@
     <div class="center-column" style="flex: 1; min-width: 0; display: flex; justify-content: center;"> 
         <div class="music-card-full" style="width: 600px; max-width: 100%; display: flex; flex-direction: column; align-items: center;">
 	        <h2 class="card-title"><?=esc($row['title'])?></h2>
-	        <div class="card-subtitle">by: <?=esc(get_artist($row['artist_id']))?></div>
+	        <div class="card-subtitle">by:
+                <a href="<?=ROOT?>/artist/<?=$row['artist_id']?>" style="color: inherit; text-decoration: none;">
+                    <?=esc(get_artist($row['artist_id']))?>
+                </a>
+            </div>
 
 	        <!-- Cập nhật phần hiển thị ảnh để căn giữa -->
 	        <div style="overflow: hidden; display: flex; justify-content: center; width: 100%; margin: 10px 0;">
@@ -177,7 +181,9 @@
                                             <?=esc($song['title'])?>
                                         </div>
                                         <div style="font-size: 0.8em; color: #666;">
-                                            <?=esc(get_artist($song['artist_id']))?>
+                                            <a href="<?=ROOT?>/artist/<?=$song['artist_id']?>" style="color: inherit; text-decoration: none;">
+                                                <?=esc(get_artist($song['artist_id']))?>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

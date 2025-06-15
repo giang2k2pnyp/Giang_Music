@@ -1,3 +1,27 @@
+    <div class="left-column" style="flex: 0 0 250px; position: sticky; top: 20px; height: fit-content;">
+        <div class="sidebar-section" style="background: #fff; border-radius: 8px; padding: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px;">Nghệ Sĩ Ngẫu Nhiên</h3>
+			<?php 
+                $query = "SELECT * FROM artists ORDER BY RAND() LIMIT 10";
+                $random_artists = db_query($query);
+            ?>
+			<?php if(!empty($random_artists)):?>
+                <ul style="list-style: none; padding: 0;">
+                    <?php foreach($random_artists as $artist):?>
+                        <li style="margin-bottom: 15px; display: flex; align-items: center;">
+                            <div style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%; margin-right: 10px;">
+                                <img src="<?=ROOT?>/<?=$artist['image']?>" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <a href="<?=ROOT?>/artist/<?=$artist['id']?>" style="color: #333; text-decoration: none;">
+                                <?=esc($artist['name'])?>
+                            </a>
+                        </li>
+                    <?php endforeach;?>
+                </ul>
+            <?php endif;?>
+        </div>
+    </div>
+
 <!--start playlist card-->
 <div class="music-card-full" style="max-width: 800px; display: flex; flex-direction: column; align-items: center;">
     
@@ -54,36 +78,39 @@
 </div>
 <!--end playlist card-->
 
-<!-- Player cố định ở cuối màn hình -->
-<!-- <div id="fixed-player" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #222; padding: 10px; z-index: 1000; border-top: 1px solid #444;">
-    <div style="max-width: 800px; margin: 0 auto; display: flex; align-items: center; gap: 15px;">
-        <img id="player-thumbnail" src="" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-        <div style="flex: 1;">
-            <div id="player-title" style="font-weight: bold; color: white;"></div>
-            <div id="player-artist" style="font-size: 0.9em; color: #aaa;"></div>
+<!-- Right column: Random playlists -->
+    <div class="right-column" style="flex: 0 0 250px; position: sticky; top: 20px; height: fit-content;">
+        <div class="sidebar-section" style="background: #fff; border-radius: 8px; padding: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px;">Playlist Ngẫu Nhiên</h3>
+            <?php 
+                $query = "SELECT * FROM list_song ORDER BY RAND() LIMIT 5";
+                $random_playlists = db_query($query);
+            ?>
+            <?php if(!empty($random_playlists)):?>
+                <div style="display: grid; gap: 15px;">
+                    <?php foreach($random_playlists as $playlist):?>
+                        <div class="playlist-card">
+                            <a href="<?=ROOT?>/playlist/<?=$playlist['id']?>" style="text-decoration: none; color: inherit;">
+                                <div style="display: flex; align-items: center;">
+                                    <div style="width: 50px; height: 50px; overflow: hidden; border-radius: 4px; margin-right: 10px;">
+                                        <img src="<?=ROOT?>/<?=$playlist['image']?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">
+                                            <?=esc($playlist['name_list'])?>
+                                        </div>
+                                        <div style="font-size: 0.8em; color: #666;">
+                                            <?=count_playlist_songs($playlist['id'])?> bài hát
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    <?php endforeach;?>
+                </div>
+            <?php endif;?>
         </div>
-        
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <button id="prev-btn" style="background: #333; border: none; color: white; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
-                </svg>
-            </button>
-            
-            <audio id="player-audio" controls style="flex: 2; min-width: 200px;"></audio>
-            
-            <button id="next-btn" style="background: #333; border: none; color: white; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
-                </svg>
-            </button>
-        </div>
-        
-        <button id="close-player" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2em;">
-            &times;
-        </button>
     </div>
-</div> -->
 
 <style>
 .playlist-songs-title {
@@ -97,12 +124,12 @@
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
-    width: 100%;
+    width: 350px;
 }
 
 .song-item img {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     margin-right: 15px;
     border-radius: 5px;
