@@ -106,7 +106,7 @@
   			
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Add New Category</h3>
+	  				<h3>Thêm thể loại nhạc mới</h3>
 
 	  				<input class="form-control my-1" value="<?=set_value('category')?>" type="text" name="category" placeholder="Category name">
 	  				<?php if(!empty($errors['category'])):?>
@@ -122,9 +122,9 @@
 	  					<small class="error"><?=$errors['disabled']?></small>
 	  				<?php endif;?>
  
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/categories">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 	  			</form>
 	  		</div>
@@ -133,7 +133,7 @@
  
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Edit Category</h3>
+	  				<h3>Chỉnh sửa</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -148,15 +148,15 @@
 	  					<option <?=set_select('disabled','0',$row['disabled'])?> value="0">No</option>
 	  				</select>
 
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/categories">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
-	  					<div class="alert">That record was not found</div>
+	  					<div class="alert">Cập nhật không thành công</div>
 	  					<a href="<?=ROOT?>/admin/categories">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trở lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -167,7 +167,7 @@
 
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Delete Category</h3>
+	  				<h3>Xóa thể loại nhạc</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -176,15 +176,15 @@
 	  					<small class="error"><?=$errors['category']?></small>
 	  				<?php endif;?>
 
-	  				<button class="btn bg-red">Delete</button>
+	  				<button class="btn bg-red">Xóa</button>
 	  				<a href="<?=ROOT?>/admin/categories">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
-	  					<div class="alert">That record was not found</div>
+	  					<div class="alert">Xóa không thành công</div>
 	  					<a href="<?=ROOT?>/admin/categories">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trỏ lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -198,9 +198,9 @@
   				$rows = db_query($query);
 
   			?>
-  			<h3>Categories 
+  			<h3>Thể loại 
   				<a href="<?=ROOT?>/admin/categories/add">
-  					<button class="float-end btn bg-purple">Add New</button>
+  					<button class="float-end btn bg-purple">Thêm mới</button>
   				</a>
   			</h3>
 
@@ -208,9 +208,9 @@
   				
   				<tr>
   					<th>ID</th>
-  					<th>Category</th>
-  					<th>Active</th>
-  					<th>Action</th>
+  					<th>Tên thể loại nhạc</th>
+  					<th>Tính khả dụng</th>
+  					<th>Thao tác</th>
    				</tr>
 
   				<?php if(!empty($rows)):?>

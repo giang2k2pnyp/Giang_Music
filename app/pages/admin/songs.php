@@ -28,6 +28,15 @@
 				$errors['artist_id'] = "an artist is required";
 			}
 
+			if(empty($errors)) {
+				$check_query = "select id from songs where title = :title limit 1";
+				$check_data = ['title' => trim($_POST['title'])];
+				$check_row = db_query_one($check_query, $check_data);
+
+				if($check_row) {
+					$errors['title'] = "Bài hát đã tồn tại trong dữ liệu";
+				}
+			}
 
 			//image
 			if(!empty($_FILES['image']['name']))
@@ -107,6 +116,7 @@
 			}
 		}
 	}else
+
 	if($action == 'edit')
 	{
 
@@ -135,6 +145,19 @@
 			if(empty($_POST['artist_id']))
 			{
 				$errors['artist_id'] = "an artist is required";
+			}
+
+			if(empty($errors)) {
+				$check_query = "select id from songs where title = :title and id != :id limit 1";
+				$check_data = [
+					'title' => trim($_POST['title']),
+					'id' => $id
+				];
+				$check_row = db_query_one($check_query, $check_data);
+
+				if($check_row) {
+					$errors['title'] = "Bài hát đã tồn tại trong dữ liệu";
+				}
 			}
 
  			//image
@@ -231,6 +254,7 @@
 			}
 		}
 	}else
+
 	if($action == 'delete')
 	{
 
@@ -281,7 +305,7 @@
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post" enctype="multipart/form-data">
 
-	  				<h3>Add New Song</h3>
+	  				<h3>Thêm bài hát mới</h3>
 
 	  				<input name="title" class="form-control my-1" value="<?=set_value('title')?>" type="text" title="title" placeholder="Song title">
 	  				<?php if(!empty($errors['title'])):?>
@@ -293,7 +317,7 @@
  						$categories = db_query($query);
  					?>
  					<select name="category_id" class="form-control my-1">
-	  					<option value="">--Select Category--</option>
+	  					<option value="">--Chọn thể loại--</option>
 
 	  					<?php if(!empty($categories)):?>
 		  					<?php foreach($categories as $cat):?>
@@ -311,7 +335,7 @@
  					?>
 
  					<select name="artist_id" class="form-control my-1">
-	  					<option value="">--Select Artist--</option>
+	  					<option value="">--Chọn nghệ sĩ--</option>
 	  					<?php if(!empty($artists)):?>
 		  					<?php foreach($artists as $cat):?>
 		  						<option <?=set_select('artist_id',$cat['id'])?> value="<?=$cat['id']?>"><?=$cat['name']?></option>
@@ -323,7 +347,7 @@
 	  				<?php endif;?>
 
  					<div class="form-control my-1">
- 						<div>Image:</div>
+ 						<div>Ảnh:</div>
 	  					<input class="form-control my-1" type="file" name="image">
 	  					
 	  					<?php if(!empty($errors['image'])):?>
@@ -333,7 +357,7 @@
 					</div>
 
 					<div class="form-control my-1">
-						<div>Audio File:</div>
+						<div>Tệp nhạc:</div>
 		  				<input class="form-control my-1" type="file" name="file">
 
 		  				<?php if(!empty($errors['file'])):?>
@@ -341,9 +365,9 @@
 		  				<?php endif;?>
 		  			</div>
  
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/songs">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 	  			</form>
 	  		</div>
@@ -352,7 +376,7 @@
  
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post" enctype="multipart/form-data">
-	  				<h3>Edit Song</h3>
+	  				<h3>Chỉnh sửa bài hát</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -366,7 +390,7 @@
  						$categories = db_query($query);
  					?>
  					<select name="category_id" class="form-control my-1">
-	  					<option value="">--Select Category--</option>
+	  					<option value="">--Chọn thể loại--</option>
 
 	  					<?php if(!empty($categories)):?>
 		  					<?php foreach($categories as $cat):?>
@@ -384,7 +408,7 @@
  					?>
 
  					<select name="artist_id" class="form-control my-1">
-	  					<option value="">--Select Artist--</option>
+	  					<option value="">--Chọn nghệ sĩ--</option>
 	  					<?php if(!empty($artists)):?>
 		  					<?php foreach($artists as $cat):?>
 		  						<option <?=set_select('artist_id',$cat['id'],$row['artist_id'])?> value="<?=$cat['id']?>"><?=$cat['name']?></option>
@@ -396,7 +420,7 @@
 	  				<?php endif;?>
 
  					<div class="form-control my-1">
- 						<div>Image:</div>
+ 						<div>Ảnh:</div>
  						<img src="<?=ROOT?>/<?=$row['image']?>" style="width:200px;height: 200px;object-fit: cover;">
 	  					<input class="form-control my-1" type="file" name="image">
 	  					
@@ -407,7 +431,7 @@
 					</div>
 
 					<div class="form-control my-1">
-						<div>Audio File:</div>
+						<div>Tệp nhạc:</div>
 						<div><?=$row['file']?></div>
 		  				<input class="form-control my-1" type="file" name="file">
 
@@ -416,15 +440,15 @@
 		  				<?php endif;?>
 		  			</div>
 
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/songs">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
-	  					<div class="alert">That record was not found</div>
+	  					<div class="alert">Cập nhật không thành công</div>
 	  					<a href="<?=ROOT?>/admin/songs">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trở lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -435,7 +459,7 @@
 
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Delete Song</h3>
+	  				<h3>Xóa bài hát</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -444,15 +468,15 @@
 	  					<small class="error"><?=$errors['title']?></small>
 	  				<?php endif;?>
 
-	  				<button class="btn bg-red">Delete</button>
+	  				<button class="btn bg-red">Xóa</button>
 	  				<a href="<?=ROOT?>/admin/songs">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
-	  					<div class="alert">That record was not found</div>
+	  					<div class="alert">Xóa không thành công</div>
 	  					<a href="<?=ROOT?>/admin/songs">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trở lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -469,9 +493,9 @@
   				$rows = db_query($query);
 
   			?>
-  			<h3>Songs
+  			<h3>Bài hát
   				<a href="<?=ROOT?>/admin/songs/add">
-  					<button class="float-end btn bg-purple">Add New</button>
+  					<button class="float-end btn bg-purple">Thêm mới</button>
   				</a>
   			</h3>
 
@@ -479,13 +503,13 @@
   				
   				<tr>
   					<th>ID</th>
-  					<th>Title</th>
-  					<th>Image</th>
-  					<th>Category</th>
-  					<th>Artist</th>
-  					<th>Audio</th>
-  					<th>View</th>
-  					<th>Action</th>
+  					<th>Tên bài hát</th>
+  					<th>Ảnh</th>
+  					<th>Thể loại</th>
+  					<th>Nghệ sĩ</th>
+  					<th>Nhạc</th>
+  					<th>Lượt nghe</th>
+  					<th>Thao tác</th>
    				</tr>
 
   				<?php if(!empty($rows)):?>
@@ -521,10 +545,10 @@
 
   	<div class="mx-2">
 		<a href="<?=ROOT?>/admin/songs?page=<?=$prev_page?>">
-			<button class="btn bg-orange">Prev</button>
+			<button class="btn bg-orange">Trước</button>
 		</a>
 		<a href="<?=ROOT?>/admin/songs?page=<?=$next_page?>">
-			<button class="float-end btn bg-orange">Next</button>
+			<button class="float-end btn bg-orange">Sau</button>
 		</a>
 	</div>
 

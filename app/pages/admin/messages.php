@@ -23,7 +23,7 @@ $threads = db_query("
 <?php require page('includes/admin-header')?>
 
 <div class="admin-container">
-    <h1>Conversations</h1>
+    <h1>Hộp thoại</h1>
     
     <div class="thread-list">
         <?php if (!empty($threads)): ?>
@@ -34,7 +34,7 @@ $threads = db_query("
                         <span><?=date("M d, Y H:i", strtotime($thread['updated_at']))?></span>
                     </div>
                     <div class="thread-info">
-                        Messages: <?=$thread['message_count']?> 
+                        Tin nhắn: <?=$thread['message_count']?> 
                         <?php if ($thread['unread_count'] > 0): ?>
                             <span class="badge"><?=$thread['unread_count']?></span>
                         <?php endif; ?>
@@ -42,7 +42,7 @@ $threads = db_query("
                 </a>
             <?php endforeach; ?>
         <?php else: ?>
-            <p>No conversations found</p>
+            <p>Không tìm thấy hộp thoại nào</p>
         <?php endif; ?>
     </div>
 </div>

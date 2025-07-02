@@ -3,13 +3,13 @@
 	<footer>
 		<div class="footer-div">
 			<ul>
-				<li><a href="<?=ROOT?>/home">Home</a></li>
-				<li><a href="<?=ROOT?>/music">Music</a></li>
-				<li><a href="<?=ROOT?>/about">About us</a></li>
-				<li><a href="<?=ROOT?>/contact">Contact us</a></li>
+				<li><a href="<?=ROOT?>/home">Trang chủ</a></li>
+				<li><a href="<?=ROOT?>/music">Bài hát</a></li>
+				<li><a href="<?=ROOT?>/about">Thông tin</a></li>
+				<li><a href="<?=ROOT?>/contact">Liên hệ</a></li>
 				
 				<?php if(!logged_in()):?>
-					<li><a href="<?=ROOT?>/login">Login</a></li>
+					<li><a href="<?=ROOT?>/login">Đăng nhập</a></li>
 				<?php endif;?>
 
 			</ul>
@@ -18,7 +18,7 @@
 			<form action="<?=ROOT?>/search">
 				<div class="form-group">
 					<input class="form-control" type="text" placeholder="Search for music" name="find">
-					<button class="btn">Search</button>
+					<button class="btn">Tìm kiếm</button>
 				</div>
 			</form>
 		</div>

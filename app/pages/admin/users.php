@@ -67,6 +67,11 @@
 		$query = "select * from users where id = :id limit 1";
   		$row = db_query_one($query,['id'=>$id]);
 
+		if(!is_admin() && $id != user('id')) {
+			message("You can only edit your own profile");
+			redirect('admin/users');
+		}
+
 		if($_SERVER['REQUEST_METHOD'] == "POST" && $row)
 		{
 
@@ -101,9 +106,11 @@
 				}
 			}
 
-			if(empty($_POST['role']))
-			{
-				$errors['role'] = "a role is required";
+			if(user('role') == 'admin') {
+				if(empty($_POST['role']))
+				{
+					$errors['role'] = "a role is required";
+				}
 			}
 
 			if(empty($errors))
@@ -112,16 +119,25 @@
 				$values = [];
 				$values['username'] = trim($_POST['username']);
 				$values['email'] 	= trim($_POST['email']);
-				$values['role'] 	= trim($_POST['role']);
 				$values['id'] 		= $id;
 
-				$query = "update users set email = :email, username = :username, role = :role where id = :id limit 1";
+				if(user('role') == 'admin') {
+					$values['role'] = trim($_POST['role']);
+				}
+
+				$query = "update users set email = :email, username = :username";
+
+				if(user('role') == 'admin') {
+					$query .= ", role = :role";
+				}
 
 				if(!empty($_POST['password']))
 				{
-					$query = "update users set email = :email, password = :password, username = :username, role = :role where id = :id limit 1";
+					$query .= ", password = :password";
 					$values['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 				}
+
+				$query .= " where id = :id limit 1";	
 
 				db_query($query,$values);
 
@@ -172,7 +188,7 @@
   			
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Add New User</h3>
+	  				<h3>Thêm người dùng mới</h3>
 
 	  				<input class="form-control my-1" value="<?=set_value('username')?>" type="text" name="username" placeholder="Username">
 	  				<?php if(!empty($errors['username'])):?>
@@ -185,7 +201,7 @@
 	  				<?php endif;?>
 
 	  				<select name="role" class="form-control my-1">
-	  					<option value="">--Select Role--</option>
+	  					<option value="">--Chọn quyền--</option>
 	  					<option <?=set_select('role','user')?> value="user">User</option>
 	  					<option <?=set_select('role','admin')?> value="admin">Admin</option>
 	  				</select>
@@ -200,9 +216,9 @@
 
 	  				<input class="form-control my-1" value="<?=set_value('retype_password')?>" type="password" name="retype_password" placeholder="Retype Password">
 	  				
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/users">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 	  			</form>
 	  		</div>
@@ -211,7 +227,7 @@
  
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Edit User</h3>
+	  				<h3>Chỉnh sửa</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -225,14 +241,20 @@
 	  					<small class="error"><?=$errors['email']?></small>
 	  				<?php endif;?>
 
-	  				<select name="role" class="form-control my-1">
-	  					<option value="">--Select Role--</option>
-	  					<option <?=set_select('role','user',$row['role'])?> value="user">User</option>
-	  					<option <?=set_select('role','admin',$row['role'])?> value="admin">Admin</option>
-	  				</select>
-	  				<?php if(!empty($errors['role'])):?>
-	  					<small class="error"><?=$errors['role']?></small>
-	  				<?php endif;?>
+	  				<?php if (user('role') == 'admin'): ?>
+						<select name="role" class="form-control my-1">
+							<option value="">--Chọn quyền--</option>
+							<option <?=set_select('role','user',$row['role'])?> value="user">User</option>
+							<option <?=set_select('role','admin',$row['role'])?> value="admin">Admin</option>
+						</select>
+						<?php if(!empty($errors['role'])):?>
+							<small class="error"><?=$errors['role']?></small>
+						<?php endif;?>
+					<?php else: ?>
+						<!-- Hiển thị role dạng text nếu không phải admin -->
+						<div class="form-control my-1"><?=$row['role']?></div>
+						<input type="hidden" name="role" value="<?=$row['role']?>">
+					<?php endif; ?>
 
 	  				<input class="form-control my-1" value="<?=set_value('password')?>" type="password" name="password" placeholder="Password (leave empty to keep old one)">
 	  				<?php if(!empty($errors['password'])):?>
@@ -241,15 +263,15 @@
 
 	  				<input class="form-control my-1" value="<?=set_value('retype_password')?>" type="password" name="retype_password" placeholder="Retype Password">
 	  				
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/users">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
 	  					<div class="alert">That record was not found</div>
 	  					<a href="<?=ROOT?>/admin/users">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trở lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -260,7 +282,7 @@
 
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Delete User</h3>
+	  				<h3>Xóa người dùng</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -272,15 +294,15 @@
 	  				<div class="form-control my-1" ><?=set_value('email',$row['email'])?></div>
 	  				<div class="form-control my-1" ><?=set_value('role',$row['role'])?></div>
 	  		 
-	  				<button class="btn bg-red">Delete</button>
+	  				<button class="btn bg-red">Xóa</button>
 	  				<a href="<?=ROOT?>/admin/users">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
 	  					<div class="alert">That record was not found</div>
 	  					<a href="<?=ROOT?>/admin/users">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trở lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -294,7 +316,7 @@
   				$rows = db_query($query);
 
   			?>
-  			<h3>Users 
+  			<h3>Người dùng 
   				<a href="<?=ROOT?>/admin/users/add">
   					<button class="float-end btn bg-purple">Add New</button>
   				</a>
@@ -306,9 +328,9 @@
   					<th>ID</th>
   					<th>Username</th>
   					<th>Email</th>
-  					<th>Role</th>
-  					<th>Date</th>
-  					<th>Action</th>
+  					<th>Quyền</th>
+  					<th>Ngày tạo</th>
+  					<th>Thao tác</th>
   				</tr>
 
   				<?php if(!empty($rows)):?>

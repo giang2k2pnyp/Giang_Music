@@ -4,6 +4,7 @@
     <title>Giang Music</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="http://localhost/giang_music/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<?=ROOT?>/assets/css/style.css?52423">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -239,10 +240,10 @@
                 </div>
                 <div class="main-nav">
                     <div class="nav-item"><a href="<?=ROOT?>/admin">Dashboard</a></div>
-                    <div class="nav-item"><a href="<?=ROOT?>/admin/users">Users</a></div>
-                    <div class="nav-item"><a href="<?=ROOT?>/admin/songs">Songs</a></div>
-                    <div class="nav-item"><a href="<?=ROOT?>/admin/categories">Categories</a></div>
-                    <div class="nav-item"><a href="<?=ROOT?>/admin/artists">Artists</a></div>
+                    <div class="nav-item"><a href="<?=ROOT?>/admin/users">Người dùng</a></div>
+                    <div class="nav-item"><a href="<?=ROOT?>/admin/songs">Bài hát</a></div>
+                    <div class="nav-item"><a href="<?=ROOT?>/admin/categories">Thể loại</a></div>
+                    <div class="nav-item"><a href="<?=ROOT?>/admin/artists">Nghệ sĩ</a></div>
                     <div class="nav-item"><a href="<?=ROOT?>/admin/playlist">Playlist</a></div>
 
                     <?php
@@ -261,19 +262,19 @@
                             <?php endif; ?>
                         </a>
                         <div class="dropdown-list">
-                            <div class="nav-item"><a href="<?=ROOT?>/admin/users/edit/<?=user('id')?>">Profile</a></div>
-                            <div class="nav-item"><a href="<?=ROOT?>">Website</a></div>
+                            <div class="nav-item"><a href="<?=ROOT?>/admin/users/edit/<?=user('id')?>">Thông tin</a></div>
+                            <div class="nav-item"><a href="<?=ROOT?>">Trang chủ</a></div>
                             <?php if (user('role') == 'admin'): ?>
                                 <div class="nav-item">
                                     <a href="<?=ROOT?>/admin/messages">
-                                        Messages
+                                        Tin nhắn
                                         <?php if ($unread_count > 0): ?>
                                             <span class="badge"><?=$unread_count?></span>
                                         <?php endif; ?>
                                     </a>
                                 </div>
                             <?php endif; ?>
-                            <div class="nav-item"><a href="<?=ROOT?>/logout">Logout</a></div>
+                            <div class="nav-item"><a href="<?=ROOT?>/logout">Đăng xuất</a></div>
                         </div>
                     </div>
                 </div>

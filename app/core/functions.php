@@ -340,27 +340,49 @@ function update_playlist($playlist_id, $name, $description) {
 
 // Xóa playlist
 function delete_playlist($playlist_id) {
-    // Xóa các bài hát trong playlist trước
-    $query1 = "DELETE FROM playlist_songs WHERE list_id = :list_id";
-    $query2 = "DELETE FROM list_song WHERE id = :id LIMIT 1";
-    
     $con = db_connect();
     
-    // Bắt đầu transaction
-    $con->beginTransaction();
-    
     try {
+        // Bắt đầu transaction
+        $con->beginTransaction();
+        
+        // 1. Xóa các bài hát trong playlist
+        $query1 = "DELETE FROM playlist_songs WHERE list_id = :list_id";
         $stm1 = $con->prepare($query1);
         $stm1->execute(['list_id' => $playlist_id]);
         
+        // 2. Xóa playlist
+        $query2 = "DELETE FROM list_song WHERE id = :id";
         $stm2 = $con->prepare($query2);
         $stm2->execute(['id' => $playlist_id]);
         
         $con->commit();
-        return true;
+        return $stm2->rowCount() > 0;
     } catch (Exception $e) {
-        $con->rollBack();
+        if ($con->inTransaction()) {
+            $con->rollBack();
+        }
         error_log("Error deleting playlist: " . $e->getMessage());
         return false;
     }
+}
+
+// Xử lý xóa playlist từ AJAX
+if (isset($_GET['action']) && $_GET['action'] == 'delete_playlist' && $_SERVER['REQUEST_METHOD'] == 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $id = $data['id'] ?? 0;
+    
+    // Kiểm tra quyền
+    $playlist = get_playlist_info($id);
+    if (!$playlist || !logged_in() || ($playlist['create_by'] != user('id') && !is_admin())) {
+        echo json_encode(['success' => false, 'message' => 'Không có quyền xóa playlist này']);
+        exit;
+    }
+    
+    if (delete_playlist($id)) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Xóa playlist thất bại']);
+    }
+    exit;
 }

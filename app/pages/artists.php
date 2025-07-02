@@ -1,6 +1,6 @@
 <?php require page('includes/header')?>
 	
-	<div class="section-title">Artists</div>
+	<div class="section-title">Nghệ sĩ</div>
 
 	<section class="content">
 		

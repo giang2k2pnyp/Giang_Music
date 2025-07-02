@@ -18,6 +18,16 @@
 				$errors['name'] = "a name can only have letters & spaces";
 			}
 
+			if(empty($errors)) {
+				$check_query = "select id from artists where name = :name limit 1";
+				$check_data = ['name' => trim($_POST['name'])];
+				$check_row = db_query_one($check_query, $check_data);
+
+				if($check_row) {
+					$errors['name'] = "That artist name is already in use";
+				}
+			}
+
 			//image
 			if(!empty($_FILES['image']['name']))
 			{
@@ -81,6 +91,19 @@
 			}else
 			if(!preg_match("/^[a-zA-Z \&\-]+$/", $_POST['name'])){
 				$errors['name'] = "a name can only have letters with no spaces";
+			}
+
+			if(empty($errors)) {
+				$check_query = "select id from artists where name = :name and id != :id limit 1";
+				$check_data = [
+					'name' => trim($_POST['name']),
+					'id' => $id
+				];
+				$check_row = db_query_one($check_query, $check_data);
+
+				if($check_row) {
+					$errors['name'] = "That artist name is already in use";
+				}
 			}
 
  			//image
@@ -181,26 +204,26 @@
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post" enctype="multipart/form-data">
 
-	  				<h3>Add New Artist</h3>
+	  				<h3>Thêm nghệ sĩ mới</h3>
 
 	  				<input class="form-control my-1" value="<?=set_value('name')?>" type="text" name="name" placeholder="Artist name">
 	  				<?php if(!empty($errors['name'])):?>
 	  					<small class="error"><?=$errors['name']?></small>
 	  				<?php endif;?>
  
- 					<label>Artist Image:</label>
+ 					<label>Ảnh nghệ sĩ:</label>
 	  				<input class="form-control my-1" type="file" name="image">
 
-	  				<label>Artist Bio:</label>
+	  				<label>Tiểu sử:</label>
 	  				<textarea rows="10" class="form-control my-1" name="bio"><?=set_value('bio')?></textarea>
 
 	  				<?php if(!empty($errors['image'])):?>
 	  					<small class="error"><?=$errors['image']?></small>
 	  				<?php endif;?>
  
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/artists">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 	  			</form>
 	  		</div>
@@ -209,7 +232,7 @@
  
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post" enctype="multipart/form-data">
-	  				<h3>Edit Artist</h3>
+	  				<h3>Chỉnh sửa</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -220,21 +243,21 @@
 
 	  				<img src="<?=ROOT?>/<?=$row['image']?>" style="width:200px;height: 200px;object-fit: cover;">
 
-	  				<div>Artist Image:</div>
+	  				<div>Ảnh nghệ sĩ:</div>
 	  				<input class="form-control my-1" type="file" name="image">
 
-	  				<label>Artist Bio:</label>
+	  				<label>Tiểu sử:</label>
 	  				<textarea rows="10" class="form-control my-1" name="bio"><?=set_value('bio',$row['bio'])?></textarea>
 
-	  				<button class="btn bg-orange">Save</button>
+	  				<button class="btn bg-orange">Lưu</button>
 	  				<a href="<?=ROOT?>/admin/artists">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
-	  					<div class="alert">That record was not found</div>
+	  					<div class="alert">Cập nhật không thành công</div>
 	  					<a href="<?=ROOT?>/admin/artists">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trở lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -245,7 +268,7 @@
 
   			<div style="max-width: 500px;margin: auto;">
 	  			<form method="post">
-	  				<h3>Delete Artist</h3>
+	  				<h3>Xóa nghệ sĩ</h3>
 
 	  				<?php if(!empty($row)):?>
 
@@ -254,15 +277,15 @@
 	  					<small class="error"><?=$errors['name']?></small>
 	  				<?php endif;?>
 
-	  				<button class="btn bg-red">Delete</button>
+	  				<button class="btn bg-red">Xóa</button>
 	  				<a href="<?=ROOT?>/admin/artists">
-	  					<button type="button" class="float-end btn">Back</button>
+	  					<button type="button" class="float-end btn">Trở lại</button>
 	  				</a>
 
 	  				<?php else:?>
-	  					<div class="alert">That record was not found</div>
+	  					<div class="alert">Xóa không thành công</div>
 	  					<a href="<?=ROOT?>/admin/artists">
-		  					<button type="button" class="float-end btn">Back</button>
+		  					<button type="button" class="float-end btn">Trở lại</button>
 		  				</a>
 	  				<?php endif;?>
 
@@ -276,9 +299,9 @@
   				$rows = db_query($query);
 
   			?>
-  			<h3>Artists
+  			<h3>Nghệ sĩ
   				<a href="<?=ROOT?>/admin/artists/add">
-  					<button class="float-end btn bg-purple">Add New</button>
+  					<button class="float-end btn bg-purple">Thêm mới</button>
   				</a>
   			</h3>
 
@@ -286,9 +309,9 @@
   				
   				<tr>
   					<th>ID</th>
-  					<th>Artist</th>
-  					<th>Image</th>
-  					<th>Action</th>
+  					<th>Tên nghệ sĩ</th>
+  					<th>Ảnh đại diện</th>
+  					<th>Thao tác</th>
    				</tr>
 
   				<?php if(!empty($rows)):?>

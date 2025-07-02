@@ -1,6 +1,6 @@
 <?php require page('includes/header')?>
 	
-	<center><div class="section-title">Artist Profile</div></center>
+	<center><div class="section-title">Thông tin nghệ sĩ</div></center>
 
 	<section class="content">
 		

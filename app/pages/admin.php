@@ -10,6 +10,13 @@ if(!is_admin())
 	$action 	= $URL[2] ?? null;
 	$id 		= $URL[3] ?? null;
 
+$allow_user_access = ($section === 'users' && $action === 'edit' && $id == user('id'));
+
+if(!is_admin() && !$allow_user_access) {
+    message("Only admins can access the admin page");
+    redirect('login');
+}
+
 	switch ($section) {
 		case 'dashboard':
 			require page('admin/dashboard');
@@ -40,7 +47,7 @@ if(!is_admin())
 			break;
 		
 		case 'reply':
-			require page('admin/reply');
+			require page('admin/reply	');
 			break;
 		
 		default:

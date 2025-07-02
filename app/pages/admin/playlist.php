@@ -36,7 +36,7 @@ $playlists = db_query($query);
                     <th>Người tạo</th>
                     <th>Số bài hát</th>
                     <th>Ngày tạo</th>
-                    <th>Hành động</th>
+                    <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>

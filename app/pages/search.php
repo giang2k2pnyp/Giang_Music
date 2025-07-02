@@ -1,6 +1,6 @@
 <?php require page('includes/header')?>
 	
-	<div class="section-title">Search for: <?=$_GET['find']?></div>
+	<div class="section-title">Tìm kiếm cho: <?=$_GET['find']?></div>
 
 	<section class="content">
 		
@@ -19,7 +19,7 @@
 				<?php include page('includes/song')?>
 			<?php endforeach;?>
 		<?php else:?>
-			<div class="m-2">No songs found</div>
+			<div class="m-2">Không tìm thấy bài hát nào</div>
 		<?php endif;?>
 
 	</section>

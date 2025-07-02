@@ -4,7 +4,7 @@
 		<img class="hero" src="<?=ROOT?>/assets/images/festival1.jpeg">
 	</section>
 	
-	<div class="section-title">Featured</div>
+	<div class="section-title">Bài Hát</div>
 
 	<section class="content">
 		
@@ -22,13 +22,13 @@
 				<?php include page('includes/song')?>
 			<?php endforeach;?>
 		<?php else:?>
-			<div class="m-2">No songs found</div>
+			<div class="m-2">Không tìm thấy bài hát nào</div>
 		<?php endif;?>
 
 	</section>
 	</section>
 	
-	<div class="section-title">Artists</div>
+	<div class="section-title">Nghệ Sĩ</div>
 
 	<section class="content">
 		
@@ -46,7 +46,7 @@
 				<?php include page('includes/artist')?>
 			<?php endforeach;?>
 		<?php else:?>
-			<div class="m-2">No artists found</div>
+			<div class="m-2">Không tìm thấy nghệ sĩ nào</div>
 		<?php endif;?>
 
 	</section>
@@ -66,7 +66,7 @@
 				<?php include page('includes/playlist')?>
 			<?php endforeach;?>
 		<?php else:?>
-			<div class="m-2">No Playlists found</div>
+			<div class="m-2">Không tìm thấy playlist nào</div>
 		<?php endif;?>
 
 	</section>

@@ -134,7 +134,7 @@
                 </div>
 
                 <div>Views: <?=$row['views']?></div>
-                <div>Date added: <?=get_date($row['date'])?></div>
+                <div>Ngày đăng: <?=get_date($row['date'])?></div>
 
                 <div class="action-buttons" style="margin: 15px 0; display: flex;">
                     <a href="<?=ROOT?>/download/<?=$row['slug']?>" style="flex: 1; margin-right: 10px;">

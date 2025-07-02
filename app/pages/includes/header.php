@@ -54,10 +54,10 @@ ob_start();
         	</div>
 
 			<div class="main-nav">
-				<div class="nav-item"><a href="<?=ROOT?>">Home</a></div>
-				<div class="nav-item"><a href="<?=ROOT?>/music">Music</a></div>
+				<div class="nav-item"><a href="<?=ROOT?>">Trang chủ</a></div>
+				<div class="nav-item"><a href="<?=ROOT?>/music">Bài hát</a></div>
 				<div class="nav-item dropdown">
-					<a href="#">Category <i class="fas fa-chevron-down"></i></a>
+					<a href="#">Thể loại <i class="fas fa-chevron-down"></i></a>
 
 					<?php 
 						$query = "select * from categories order by category asc";
@@ -67,27 +67,27 @@ ob_start();
 					<div class="dropdown-list">	 				 
 						<?php if(!empty($categories)):?>
 							<?php foreach($categories as $cat):?>
-								<div class="nav-item"><a href="<?=ROOT?>/category/<?=$cat['category']?>"><?=$cat['category']?></a></div>
+								<div class="nav-item"><a href="<?=ROOT?>/category/<?=rawurlencode($cat['category'])?>"><?=$cat['category']?></a></div>
 							<?php endforeach;?>
 						<?php endif;?>
 					</div>
 				</div>
-				<div class="nav-item"><a href="<?=ROOT?>/artists">Artists</a></div>
+				<div class="nav-item"><a href="<?=ROOT?>/artists">Nghệ sĩ</a></div>
 				<div class="nav-item"><a href="<?=ROOT?>/playlists">Playlist</a></div>
-				<div class="nav-item"><a href="<?=ROOT?>/about">About us</a></div>
-				<div class="nav-item"><a href="<?=ROOT?>/contact">Contact us</a></div>
+				<div class="nav-item"><a href="<?=ROOT?>/about">Thông tin</a></div>
+				<div class="nav-item"><a href="<?=ROOT?>/contact">Liên hệ</a></div>
 				
 				<?php if(logged_in()):?>
 					<div class="nav-item dropdown">
 						<a href="#">Hi,<i class="fas fa-user"></i> <?=user('username')?> <i class="fas fa-chevron-down"></i></a>
 						<div class="dropdown-list">
-							<div class="nav-item"><a href="<?=ROOT?>/admin/users/edit/<?=user('id')?>">Profile</a></div>
+							<div class="nav-item"><a href="<?=ROOT?>/admin/users/edit/<?=user('id')?>">Thông tin</a></div>
 							<div class="nav-item"><a href="<?=ROOT?>/admin">Admin</a></div>
-							<div class="nav-item"><a href="<?=ROOT?>/logout">Logout</a></div>
+							<div class="nav-item"><a href="<?=ROOT?>/logout">Đăng xuất</a></div>
 						</div>
 					</div>
 				<?php else: ?>
-					<div class="nav-item"><a href="<?=ROOT?>/login"><i class="fas fa-sign-in-alt"></i> Login</a></div>
+					<div class="nav-item"><a href="<?=ROOT?>/login"><i class="fas fa-sign-in-alt"></i>Đăng nhập</a></div>
 				<?php endif;?>
 			</div>
 		</div>

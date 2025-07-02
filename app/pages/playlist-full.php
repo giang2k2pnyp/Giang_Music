@@ -23,9 +23,21 @@
     </div>
 
 <!--start playlist card-->
-<div class="music-card-full" style="max-width: 800px; display: flex; flex-direction: column; align-items: center;">
+<div class="music-card-full" style="flex: 2 0 500px; max-width: 800px; display: flex; flex-direction: column; align-items: center;">
     
-    <h2 class="card-title"><?=esc($playlist['name_list'])?></h2>
+    <h2 class="card-title"><?=esc($playlist['name_list'])?>
+        <div style="position: relative; display: inline-block; margin-left: 15px;">
+            <?php if(logged_in() && ($playlist['create_by'] == user('id') || is_admin())): ?>
+                <button class="menu-button" style="background: none; border: none; cursor: pointer; font-size: 1.5em;">&#8942;</button>
+                <div class="dropdown-menu" style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.2); border-radius: 5px; z-index: 100; right: 0; min-width: 150px;">
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li><a href="<?=ROOT?>/playlist-edit?id=<?=$playlist['id']?>" style="padding: 10px; display: block; text-decoration: none; color: #333;">Chỉnh sửa</a></li>
+                        <li><a href="#" onclick="deletePlaylist(<?=$playlist['id']?>)" style="padding: 10px; display: block; text-decoration: none; color: #ff0000;">Xóa</a></li>
+                    </ul>
+                </div>
+            <?php endif; ?>
+        </div>
+    </h2>
     <p>Tạo bởi: <?=esc($playlist['username'])?> • <?=get_date($playlist['date_create'])?></p>
 
     <div style="overflow: hidden; display: flex; width: 350px;">
@@ -201,6 +213,56 @@ document.getElementById('random-play-button').addEventListener('click', function
         alert('Player không khả dụng. Vui lòng tải lại trang!');
     }
 });
+
+// Hiển thị/ẩn menu
+document.querySelector('.menu-button')?.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var menu = this.nextElementSibling;
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+    }
+});
+
+// Đóng menu khi click ra ngoài
+document.addEventListener('click', function() {
+    var menus = document.querySelectorAll('.dropdown-menu');
+    menus.forEach(function(menu) {
+        menu.style.display = 'none';
+    });
+});
+
+// Xóa playlist
+function deletePlaylist(playlistId) {
+    if (confirm('Bạn có chắc chắn muốn xóa playlist này không?')) {
+        fetch('<?=ROOT?>/delete-playlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: playlistId})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Playlist đã được xóa thành công!');
+                window.location.href = '<?=ROOT?>/playlist';
+            } else {
+                alert('Lỗi: ' + (data.message || 'Không rõ nguyên nhân'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi kết nối đến máy chủ');
+        });
+    }
+}
 
 // Chuyển dữ liệu PHP sang JS
 const playlistSongs = <?= json_encode($songs) ?>;

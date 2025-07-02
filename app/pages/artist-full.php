@@ -36,7 +36,7 @@
 			<div class="card-content">
 				<div><?=esc($row['bio'])?></div>
 
-				<div>Artist Songs:</div>
+				<div>Bài hát của nghệ sĩ:</div>
 				<div style="display: flex;flex-wrap: wrap;justify-content: center;">
 					<?php 
 						$query ="select * from songs where artist_id = :artist_id order by views desc limit 8";

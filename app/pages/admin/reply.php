@@ -43,8 +43,8 @@ db_query("UPDATE threads SET is_read = 1 WHERE id = ?", [$thread_id]);
 <?php require page('includes/admin-header')?>
 
 <div class="admin-container">
-    <h1>Conversation Thread</h1>
-    <a href="<?=ROOT?>/admin/messages">Back to messages</a>
+    <h1>Hộp thoại</h1>
+    <a href="<?=ROOT?>/admin/messages">Trở lại</a>
 
     <div class="message-list">
         <?php if (!empty($messages)): ?>
@@ -60,7 +60,7 @@ db_query("UPDATE threads SET is_read = 1 WHERE id = ?", [$thread_id]);
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p>No messages found</p>
+            <p>Không có tin nhắn</p>
         <?php endif; ?>
     </div>  
 
@@ -68,7 +68,7 @@ db_query("UPDATE threads SET is_read = 1 WHERE id = ?", [$thread_id]);
     <div class="reply-form">
         <form method="POST">
             <div class="form-group">
-                <label for="message">Reply:</label>
+                <label for="message">Trả lời:</label>
                 <textarea 
                     id="message" 
                     name="message" 
@@ -77,7 +77,7 @@ db_query("UPDATE threads SET is_read = 1 WHERE id = ?", [$thread_id]);
                     required
                 ></textarea>
             </div>
-            <button type="submit" class="btn">Send Reply</button>
+            <button type="submit" class="btn">Gửi</button>
         </form>
     </div>
 </div>

@@ -5,9 +5,15 @@
 	<section class="content">
 		
 		<?php 
-			// $category = isset($URL[1]) ? urldecode($URL[1]) : null;
-			$category = $URL[1] ?? null;
-			$query = "select * from songs where category_id in (select id from categories where category = :category) order by views desc limit 24";
+			$category = isset($URL[1]) ? rawurldecode($URL[1]) : null;
+			// $category = $URL[1] ?? null;
+			$query = "SELECT * FROM songs 
+					  WHERE category_id IN (
+						SELECT id FROM categories 
+						WHERE TRIM(category) = :category
+					  ) 
+					  ORDER BY views DESC 
+					  LIMIT 24";
 			
 			$rows = db_query($query,['category'=>$category]);
 
@@ -18,7 +24,7 @@
 				<?php include page('includes/song')?>
 			<?php endforeach;?>
 		<?php else:?>
-			<div class="m-2">No songs found</div>
+			<div class="m-2">Không tìm thấy bài hát nào</div>
 		<?php endif;?>
 
 	</section>

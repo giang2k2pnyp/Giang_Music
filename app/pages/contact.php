@@ -71,10 +71,10 @@ if ($show_thread) {
 <?php require page('includes/header')?>
 
 <div class="contact-container">
-    <h1>Contact Admin</h1>
+    <h1>Liên hệ Admin</h1>
     <?php if ($show_thread): ?>
         <!-- Hiển thị chi tiết hội thoại -->
-        <a href="<?=ROOT?>/contact">Back to conversations</a>
+        <a href="<?=ROOT?>/contact">Trở lại hội thoại</a>
         <div class="message-list">
             <?php if (!empty($thread_messages)): ?>
                 <?php foreach ($thread_messages as $msg): ?>
@@ -89,7 +89,7 @@ if ($show_thread) {
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p>No messages found in this conversation</p>
+                <p>Không có tin nhắn trong hội thoại</p>
             <?php endif; ?>
         </div>
 
@@ -98,7 +98,7 @@ if ($show_thread) {
             <form method="POST">
                 <input type="hidden" name="thread_id" value="<?=$current_thread_id?>">
                 <div class="form-group">
-                    <label for="message">Your Reply:</label>
+                    <label for="message">Trả lời:</label>
                     <textarea 
                         id="message" 
                         name="message" 
@@ -107,14 +107,14 @@ if ($show_thread) {
                         required
                     ></textarea>
                 </div>
-                <button type="submit" class="btn">Send Reply</button>
+                <button type="submit" class="btn">Gửi</button>
             </form>
         </div>
 
     <?php else: ?>
         <!-- Hiển thị danh sách hội thoại -->
         <div class="conversation-history">
-            <h3>Your Conversations</h3>
+            <h3>Hội thoại của bạn</h3>
             <?php if (!empty($threads)): ?>
                 <?php foreach ($threads as $thread): ?>
                     <a href="<?=ROOT?>/contact?thread_id=<?=$thread['id']?>" class="thread-item <?=$thread['unread_count'] > 0 ? 'unread' : ''?>">
@@ -128,14 +128,14 @@ if ($show_thread) {
                     </a>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p>No conversations found</p>
+                <p>Không tìm thấy cuộc hội thoại</p>
             <?php endif; ?>
         </div>    
         
         <!-- Form gửi tin nhắn mới -->
         <form method="POST">
             <div class="form-group">
-                <label for="message">Your Message:</label>
+                <label for="message">Tin nhắn của bạn:</label>
                 <textarea 
                     id="message" 
                     name="message" 
@@ -144,7 +144,7 @@ if ($show_thread) {
                     required
                 ></textarea>
             </div>
-            <button type="submit" class="btn">Send Message</button>
+            <button type="submit" class="btn">Gửi tin nhắn</button>
         </form>
     <?php endif; ?>
 </div>
